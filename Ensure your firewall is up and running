@@ -1,0 +1,39 @@
+Ensuring your local firewall is up and running is one of the most basic things you can do to restrict access to your Linux server. Some Linux distributions, such as Red Hat Enterprise Linux (RHEL), enable the firewall by default during installation. However, it's a good idea to verify that the firewall is enabled in case you installed a server from, for instance, a corporate template that doesn't enable it by default.
+
+To ensure the firewall is installed, up, and running using Ansible, use the ansible.builtin.dnf and ansible.builtin.service modules with the appropriate firewall service for your distribution. For Fedora-based distributions, the firewall service is firewalld. Enable firewalld by adding both tasks like this:
+
+- name: Ensure firewall package is installed
+  ansible.builtin.dnf:
+    name: firewalld
+    state: present
+
+- name: Ensure firewall service is up and running
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+Then, ensure the firewall allows access only to services you need, disabling other services. This task varies depending on your system's purpose. For example, disable services cockpit and dhcpv6-client if you don't use them by using the module ansible.posix.firewalld with a loop:
+
+- name: Block non-required services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    state: disabled
+    permanent: yes
+    immediate: yes
+  loop:
+    - cockpit
+    - dhcpv6-client
+
+Finally, enable required services using the same module. For example, ensure that you can access your server using SSH:
+
+- name: Enable required services
+  ansible.posix.firewalld:
+    service: "ssh"
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+You can also use a loop if you need to enable more services or even configure both settings as a single task by looping over a dictionary and combining the services with the desired state.
+
+Next, ensure SELinux is enabled.
