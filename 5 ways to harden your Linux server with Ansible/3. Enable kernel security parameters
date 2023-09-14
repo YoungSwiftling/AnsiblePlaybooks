@@ -1,0 +1,79 @@
+# Enable kernel security parameters
+
+# The Linux kernel is highly flexible and customizable to meet diverse requirements, workloads, and uses. You can benefit from this flexibility to increase your server security by changing some kernel parameters. Linux exposes most of these parameters in the virtual filesystem /proc. You can change them by setting the values directly into the corresponding /proc key, but it's harder to manage. The command-line utility sysctl makes this task pretty easy to implement and manage. You can also use the Ansible module ansible.posix.sysctl to manage kernel parameters.
+
+# The Linux kernel makes several parameters available to change. These parameters impact the system's functionality and security in different ways. Ensure that you change the ones compatible with your server's purpose and utilization.
+
+Start by updating basic system parameters such as:
+
+    Randomize virtual address space, which makes it harder for an attacker to use known memory addresses for exploitation.
+    Disable dmesg access to unprivileged users.
+    Disable kernel profiling by unprivileged users.
+
+Set these parameters using the ansible.posix.sysctl module with a loop, like this:
+
+- name: Harden kernel parameters
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    sysctl_file: /etc/sysctl.d/90-kernel.conf
+  loop:
+  - name: kernel.randomize_va_space
+    value: 2
+  - name: kernel.dmesg_restrict
+    value: 1
+  - name: kernel.perf_event_paranoid
+    value: 2
+
+Next, enable some basic network-related protections:
+
+    Disable TCP SYN cookies to prevent SYN flood attacks.
+    Log Martian packets to allow inspection of Internet Protocol (IP) packets from reserved addresses.
+    Disable acceptance of source-routed packets on IPv4 and IPv6 to prevent accepting routing changes that could bypass network security.
+
+- name: Harden network parameters
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    sysctl_file: /etc/sysctl.d/90-net.conf
+  loop:
+   - name: net.ipv4.tcp_syncookies
+     value: 1
+   - name: net.ipv4.conf.default.log_martians
+     value: 1
+   - name: net.ipv4.conf.all.log_martians
+     value: 1
+   - name: net.ipv4.conf.all.accept_source_route
+     value: 0
+   - name: net.ipv4.conf.default.accept_source_route
+     value: 0
+   - name: net.ipv6.conf.all.accept_source_route
+     value: 0
+   - name: net.ipv6.conf.default.accept_source_route
+     value: 0
+
+Finally, unless you use bridged network connections for virtual machines or containers, disable IP forwarding:
+
+- name: Disable ip forwarding
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    sysctl_file: /etc/sysctl.d/90-ip.conf
+  loop:
+  - name: net.ipv4.ip_forward
+    value: 0
+  - name: net.ipv6.conf.all.forwarding
+    value: 0
+
+# These options improve your server security by preventing attackers from using the network to circumvent other protections. Note that the default value for some of these parameters can be useful in other situations, such as network routers. They should not be needed in most servers.
+
+# Once you set some basic network security options, improve on them by blocking some ICMP requests.

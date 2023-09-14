@@ -1,0 +1,42 @@
+# Disable ICMP
+
+# Internet Control Message Protocol (ICMP) is a network protocol mainly used to manage and monitor networks. ICMP has many useful applications, but attackers can use some of its functionality to exploit your system.
+
+# Disabling ICMP may impact network monitoring tools that rely on it. Consult with your system's management team before making changes. If this is your private server or your server is exposed on the internet, you should disable some ICMP capabilities to prevent common attack vectors. These include:
+
+    Ignore ICMP broadcast echo requests to make it harder to map your host.
+    Ignore ICMP echo "ping" requests to make it harder to find your server.
+    Disable ICMP redirects on IPv4/IPv6 interfaces to prevent "man-in-the-middle" attacks.
+    Disable sending ICMP redirects to prevent leaking network routing information that could be further exploited.
+
+# Enable these options using the module ansible.posix.sysctl with a loop:
+
+- name: Disable ICMP echo and redirects
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    sysctl_file: /etc/sysctl.d/90-icmp.conf
+  loop:
+  - name: net.ipv4.icmp_echo_ignore_broadcasts
+    value: 1
+  - name: net.ipv4.icmp_echo_ignore_all
+    value: 1
+  - name: net.ipv4.conf.default.accept_redirects
+    value: 0
+  - name: net.ipv4.conf.all.accept_redirects
+    value: 0
+  - name: net.ipv6.conf.all.accept_redirects
+    value: 0
+  - name: net.ipv6.conf.default.accept_redirects
+    value: 0
+  - name: net.ipv4.conf.default.send_redirects
+    value: 0
+  - name: net.ipv4.conf.all.send_redirects
+    value: 0
+
+As with the network options, the default values of these parameters are required for routers but not servers. You can change them to improve security.
+
+Next, make it easier to understand your system by enabling system auditing.

@@ -1,0 +1,48 @@
+# Enable system auditing
+
+# The final step to improve security in your servers is enabling the audit services. Unlike the actions from previous sections in this article, enabling system auditing does not offer active system protection. Nonetheless, it improves your system security by capturing information you can use to track security-related incidents and better understand server activities to implement additional policies or enhance security measures.
+
+# Ensure system audit is working by using Ansible modules ansible.builtin.dnf and ansible.builtin.service:
+
+- name: Ensure audit package is installed
+  ansible.builtin.dnf:
+    name: audit
+    state: present
+
+- name: Ensure auditd service is up and running
+  ansible.builtin.service:
+    name: auditd
+    state: started
+    enabled: yes
+
+# Then, implement a basic set of rules that include, at minimum, the option -e 2 to make the rules configuration immutable. This setting requires a reboot to implement the changes, which prevents someone from intentionally or inadvertently stopping or tampering with the audit system:
+
+$ vi audit.rules
+## First rule - delete all
+-D
+
+## Increase the buffers to survive stress events.
+## Make this bigger for busy systems
+-b 8192
+
+## This determine how long to wait in burst of events
+--backlog_wait_time 60000
+
+## Set failure mode to syslog
+-f 1
+
+## Make rules configuration immutable (requires reboot to change)
+-e 2
+
+Finally, use Ansible's ansible.builtin.copy module to copy the rules file to its proper place. The audit service doesn't like to be restarted because it could not log potential issues. It's recommended to reboot the machine to make these changes effective. You can do that by notifying the same reboot_host handler you added for the SELinux task:
+
+- name: Add a basic audit config
+  ansible.builtin.copy:
+    src: audit.rules
+    dest: /etc/audit/rules.d/audit.rules
+    owner: root
+    group: root
+    mode: 0600
+  notify: reboot_host
+
+# The default audit rules provide a good foundation for system auditing, but you can add more rules to record and track other relevant events. 
