@@ -1,0 +1,16 @@
+# File
+
+# The file  module allows you to control the state of files and directories ,setting permissions and ownership .
+
+---
+- hosts: web 
+  user: root
+  become: yes
+  connection: ssh
+  tasks:
+    - name: change file with owner and permissions
+      file:
+        path: /Downloads/filesend2.txt
+        owner: root
+        group: root
+        mode: '0744'
