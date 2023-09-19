@@ -1,0 +1,9 @@
+ansible ad hoc command to copy directory - Local to remote
+
+This is an ansible AD HOC command to copy a directory to the remote server
+ansible testserver -m copy -a "src=~/Downloads/logos dest=/var/www/html/ owner=apache group=apache mode=0644 " -i ansible_hosts -b
+
+You need to notice that there is no / at the end of src path. It is just ~/Downloads/logos
+
+If you put a slash at the end. It would copy only the contents of the directory alone but not the directory.
+

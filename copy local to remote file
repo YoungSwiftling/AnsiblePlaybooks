@@ -1,0 +1,5 @@
+ansible ad hoc command to copy file - Local to remote
+
+The following ad hoc command with copy module copies the file from Src location on the local control machine to the specified location on the remote server
+
+ansible testserver -m copy -a "src=~/Downloads/index.html dest=/var/www/html owner=apache group=apache mode=0644"

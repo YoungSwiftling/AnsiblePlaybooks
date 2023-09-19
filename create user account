@@ -1,0 +1,30 @@
+// Create a unix user with ansible ad hoc command
+
+// In this example, we are going to create a UNIX user using the ansible user module:
+
+$ ansible app -m user -a "name=weblogic group=weblogic createhome=yes" -b
+
+mwivmapp01 | SUCCESS => {
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1001,
+    "home": "/home/weblogic",
+    "name": "weblogic",
+    "shell": "/bin/bash",
+    "state": "present",
+    "system": false,
+    "uid": 1001
+}
+mwivmapp02 | SUCCESS => {
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1001,
+    "home": "/home/weblogic",
+    "name": "weblogic",
+    "shell": "/bin/bash",
+    "state": "present",
+    "system": false,
+    "uid": 1001
+}

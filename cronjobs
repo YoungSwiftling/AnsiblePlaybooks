@@ -1,0 +1,23 @@
+# Managing Cron Job and Scheduling with Ansible ad hoc
+
+# We can easily manage the Cron jobs with Ansible cron module. Here are the list commands you can keep handy
+
+#  Run the job every 15 minutes
+$ ansible multi -s -m cron -a "name='daily-cron-all-servers' minute=*/15 
+job='/path/to/minute-script.sh'"
+
+# Run the job every four hours
+$ ansible multi -s -m cron -a "name='daily-cron-all-servers' hour=4 
+job='/path/to/hour-script.sh'"
+
+# Enabling a Job to run at system reboot
+$ ansible multi -s -m cron -a "name='daily-cron-all-servers' special_time=reboot 
+job='/path/to/startup-script.sh'"
+
+# Scheduling a Daily job
+$ ansible multi -s -m cron -a "name='daily-cron-all-servers' special_time=daily 
+job='/path/to/daily-script.sh'"
+
+# Scheduling a Weekly job
+$ ansible multi -s -m cron -a "name='daily-cron-all-servers' special_time=weekly 
+job='/path/to/daily-script.sh'"

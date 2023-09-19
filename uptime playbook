@@ -1,0 +1,47 @@
+# While working with EC2 Linux instances there could be a requirement to get the list of all the machines which had not been rebooted over months or for a particular number of days.The reason could be for audit or to the check the status of instances.
+
+# I have put together tasks to accomplish it as an Ansible Playbook below.
+# Assumptions
+
+# You have an working Ansible environment with a proper inventory file with all the details of hosts being managed.
+# Script
+
+- name: Get the list of all the nodes which are running over a month
+  hosts: all
+  gather_facts: false
+  tasks:
+
+      - name: Show hostname for sanity check (or just use -v flag for verbose)
+        command: hostname
+        register: hostname
+      - debug: var=hostname.stdout_lines
+
+      - name: Check uptime prior reboot
+        shell: cut -d ' ' -f1 /proc/uptime
+        register: UPTIME_PRE_REBOOT
+
+      - name: Setting fact for number of days
+        set_fact:
+          uptime_days: "{ { (UPTIME_PRE_REBOOT.stdout | int / 86400) | round(0) } }"
+
+      - name: Hosts to be rebooted.
+        debug:
+          msg: " has not been rebooted since  days,which is older than a month"
+        when: (uptime_days | int) > 30
+
+
+
+
+
+# Example 2:  ansible ad hoc command to check uptime
+
+# In this example, we are going to know the uptime of the hosts. Ansible provides two major modules to run the command over the host group or on the remote server.
+
+# Which one to pick is not a big confusion if you know what are they and their capabilities
+# FAQ: Ansible command vs shell module
+
+# Here are the commands you can use to get the uptime. All three commands would yield you the same results.
+
+ansible multi -m command -a uptime 
+ansible multi -m shell -a uptime 
+ansible multi -a uptime

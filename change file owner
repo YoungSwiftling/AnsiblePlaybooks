@@ -1,0 +1,30 @@
+# Change ownership of a file using ansible ad hoc command
+
+# In this example, we are going to change the ownership of the file using ansible ad hoc command with ansible file module
+
+$ ansible app -m file -a "path=/opt/oracle group=weblogic owner=weblogic" -i ansible_hosts -b
+
+mwivmapp01 | SUCCESS => {
+    "changed": true,
+    "gid": 1001,
+    "group": "weblogic",
+    "mode": "0755",
+    "owner": "weblogic",
+    "path": "/opt/oracle",
+    "secontext": "unconfined_u:object_r:usr_t:s0",
+    "size": 6,
+    "state": "directory",
+    "uid": 1001
+}
+mwivmapp02 | SUCCESS => {
+    "changed": true,
+    "gid": 1001,
+    "group": "weblogic",
+    "mode": "0755",
+    "owner": "weblogic",
+    "path": "/opt/oracle",
+    "secontext": "unconfined_u:object_r:usr_t:s0",
+    "size": 6,
+    "state": "directory",
+    "uid": 1001
+}

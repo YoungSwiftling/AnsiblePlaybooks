@@ -1,0 +1,14 @@
+# Package
+
+# The package module allows you to install, update, or remove software packages from your target system using the operating system standard package manager.
+
+---
+- hosts: web 
+  user: root
+  become: yes
+  connection: ssh
+  tasks:
+  - name: install ntpdate
+    package:
+      name: ntpdate
+      state: present

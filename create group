@@ -1,0 +1,19 @@
+# Create a user group with ansible ad hoc command
+
+# Here we are creating a user name group named weblogic using the ansible group module, the same task can be reversed to delete the group if you change the state to absent
+
+$ ansible linux -s -m group -a "name=weblogic state=present" 
+mwivmapp02 | SUCCESS => {
+    "changed": true,
+    "gid": 1001,
+    "name": "weblogic",
+    "state": "present",
+    "system": false
+}
+mwivmapp01 | SUCCESS => {
+    "changed": true,
+    "gid": 1001,
+    "name": "weblogic",
+    "state": "present",
+    "system": false
+}

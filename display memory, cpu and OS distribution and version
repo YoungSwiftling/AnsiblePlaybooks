@@ -1,0 +1,48 @@
+ad hoc command to display memory, cpu and OS distribution and version
+
+Here we have given a Ansible Ad hoc command to display system information like memory, cpu etc.
+
+we have used Ansible setup module with filter  to select necassary attributes of a system.
+
+to know more about what other ansible_facts or variables you can possibly use in this filter. read our detail article on ansible facts
+
+But this ad hoc command would help you solve things up.
+
+$ ansible linux -m setup -i ansible_hosts -a 'filter=ansible_distribution,ansible_distribution_version,ansible_memfree_mb,ansible_memtotal_mb,ansible_processor_cores*,ansible_architecture' 2>/dev/null
+
+
+10.0.4.26 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_architecture": "x86_64",
+        "ansible_distribution": "Ubuntu",
+        "ansible_distribution_version": "20.04",
+        "ansible_memfree_mb": 127,
+        "ansible_memtotal_mb": 3933,
+        "ansible_processor_cores": 2,
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false
+}
+10.0.1.120 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_architecture": "x86_64",
+        "ansible_distribution": "Ubuntu",
+        "ansible_distribution_version": "18.04",
+        "ansible_memfree_mb": 134,
+        "ansible_memtotal_mb": 3943,
+        "ansible_processor_cores": 2,
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false
+}
+
+
+
+
+
+
+
+
+Example 2: 
+
+$ ansible linux -m setup 'filter=ansible_distribution,ansible_distribution_version,ansible_memfree_mb,ansible_memtotal_mb,ansible_processor_cores*,ansible_architecture' 2>/dev/null

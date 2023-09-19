@@ -1,0 +1,30 @@
+# Create a file with 755 permission using ansible ad hoc commands
+
+# Like the previous example, we are going to create a file this time with 755 permission:
+
+$ ansible app -m file -a "path=/tmp/testfile state=touch mode=0755"
+
+mwivmapp02 | SUCCESS => {
+    "changed": true,
+    "dest": "/tmp/testfile",
+    "gid": 1000,
+    "group": "vagrant",
+    "mode": "0755",
+    "owner": "vagrant",
+    "secontext": "unconfined_u:object_r:user_tmp_t:s0",
+    "size": 0,
+    "state": "file",
+    "uid": 1000
+}
+mwivmapp01 | SUCCESS => {
+    "changed": true,
+    "dest": "/tmp/testfile",
+    "gid": 1000,
+    "group": "vagrant",
+    "mode": "0755",
+    "owner": "vagrant",
+    "secontext": "unconfined_u:object_r:user_tmp_t:s0",
+    "size": 0,
+    "state": "file",
+    "uid": 1000
+}

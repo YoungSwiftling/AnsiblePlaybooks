@@ -1,0 +1,30 @@
+# Create a Directory with 755 permission using ansible ad hoc command
+
+# In this example, we are going to create a new directory with 755 permisssion this is done using the ansible file module:
+
+$ ansible app -m file -a "path=/opt/oracle state=directory mode=0755" -b
+
+mwivmapp01 | SUCCESS => {
+    "changed": true,
+    "gid": 0,
+    "group": "root",
+    "mode": "0755",
+    "owner": "root",
+    "path": "/opt/oracle",
+    "secontext": "unconfined_u:object_r:usr_t:s0",
+    "size": 6,
+    "state": "directory",
+    "uid": 0
+}
+mwivmapp02 | SUCCESS => {
+    "changed": true,
+    "gid": 0,
+    "group": "root",
+    "mode": "0755",
+    "owner": "root",
+    "path": "/opt/oracle",
+    "secontext": "unconfined_u:object_r:usr_t:s0",
+    "size": 6,
+    "state": "directory",
+    "uid": 0
+}

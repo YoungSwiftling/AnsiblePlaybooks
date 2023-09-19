@@ -1,0 +1,5 @@
+# Ad hoc command to Install a package using yum module
+
+# How to install a package or software in linux using yum module of ansible
+
+ansible multi -s -m yum -a "name=httpd state=installed"

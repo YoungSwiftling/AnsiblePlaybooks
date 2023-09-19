@@ -1,6 +1,6 @@
 # File
 
-# The file  module allows you to control the state of files and directories ,setting permissions and ownership .
+# The file module allows you to control the state of files and directories ,setting permissions and ownership .
 
 ---
 - hosts: web 

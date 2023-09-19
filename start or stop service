@@ -1,0 +1,9 @@
+<!-- ad hoc command to Start or stop the service
+
+You really do not have to log in to start or stop the service running in your Linux system. you can simply use this ansible service module ad hoc command -->
+
+# To Start a Service
+ansible multi -s -m service -a "name=httod state=started enabled=yes"
+
+# To Stop a Service
+ansible multi -s -m service -a "name=httpd state=stop enabled=yes"

@@ -1,0 +1,25 @@
+# Example1:  ansible ad hoc ping example
+
+# We presume that you have set up SSH key based auth between the control machine and the hosts. If yes then there is no need to enter the credentials and command would be simple. -->
+
+$ ansible groupname -m ping 
+
+
+mwivmapp02 | SUCCESS => {
+"changed": false,
+"ping": "pong"
+}
+mwisqldb01 | SUCCESS => {
+"changed": false,
+"ping": "pong"
+}
+mwivmapp01 | SUCCESS => {
+"changed": false,
+"ping": "pong"
+}
+mwiweb02 | SUCCESS => {
+"changed": false,
+"
+}
+ 
+

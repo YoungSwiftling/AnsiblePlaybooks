@@ -1,0 +1,5 @@
+Check free disk space of hosts using ansible ad hoc commands
+
+Most of us would like to quickly check the disk space of many machines with a single command. this is that command
+
+ansible multi -a "df -h"

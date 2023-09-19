@@ -1,0 +1,9 @@
+<!-- How to check the free memory or memory usage of  hosts using ansible ad hoc command
+
+The following ansible ad hoc command would help you get the free memory of all the hosts in the host group named multi
+
+As you could see we are running the free -m command on the remote hosts and collecting the information -->
+
+$ ansible linux -a "free -m" 
+$ ansible linux -a "free -m" -i ansible_hosts
+
