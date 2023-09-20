@@ -7,3 +7,33 @@ ansible multi -s -m service -a "name=httod state=started enabled=yes"
 
 # To Stop a Service
 ansible multi -s -m service -a "name=httpd state=stop enabled=yes"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Example 2:  ansible ad hoc command to check uptime
+
+# ad hoc command to stop, start, restart service - Ansible SystemD
+
+# Simple way to restart any service with Ansible ad hoc command is to use Shell module with the actual service or systemctl command
+
+$ ansible webservers -m shell -a "service nginx restart" -b
+$ ansible webservers -m shell -a "systemctl restart nginx" -b
+
+# You can also use Ansible's built in systemd module otherwise like this.
+$ ansible webservers  -m systemd -a "name=nginx state=reloaded" -i prod-ansible-hosts
+$ ansible webservers -m systemd -a "name=nginx state=restarted" -i prod-ansible-hosts
+$ ansible webservers -m systemd -a "name=nginx state=started" -i prod-ansible-hosts
+$ ansible webservers -m systemd -a "name=nginx state=stopped" -i prod-ansible-hosts
+
+# So this is how you can manage to start, stop , restart services using ansible ad hoc

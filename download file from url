@@ -1,0 +1,37 @@
+// ansible ad hoc command to download a file from URL
+
+// To download a file from URL in ansible ad hoc. You can either invoke linux commands like CURL or WGET  but the preferred way is to use the get_url module of Ansible.
+
+// This is how you can use get_url module in Ansible ad hoc to download a file in remote system
+
+$ ansible testserver -m get_url -a "url=https://nodejs.org/dist/v14.17.4/node-v14.17.4-linux-x64.tar.xz dest=/tmp mode=0755" -i prod-ansible-hosts
+testserver | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "checksum_dest": null,
+    "checksum_src": "8ea8ea5e5b34da3e3d81e557d373ab3ffdae91cd",
+    "dest": "/tmp/node-v14.17.4-linux-x64.tar.xz",
+    "elapsed": 0,
+    "gid": 1000,
+    "group": "ubuntu",
+    "md5sum": "9613888c2a5ad0cbe83f03e0b8ed8707",
+    "mode": "0755",
+    "msg": "OK (21754020 bytes)",
+    "owner": "ubuntu",
+    "size": 21754020,
+    "src": "/home/ubuntu/.ansible/tmp/ansible-tmp-1627824782.251616-27135-120094112712777/tmpa148e1",
+    "state": "file",
+    "status_code": 200,
+    "uid": 1000,
+    "url": "https://nodejs.org/dist/v14.17.4/node-v14.17.4-linux-x64.tar.xz"
+}
+
+// You just have to pass the necassary parameters to the get_url
+
+// dest : Destination directory where the file should be downloaded
+
+// url: From where the file should be obtained
+
+// mode:  The file permission mode of the file once downloaded. we are setting 755

@@ -1,0 +1,48 @@
+<!-- ansible ad hoc command to check listening ports
+
+To check the list of open ports you can use netstat or ss  commands over the Ansible shell module but the preferred way is to use the ansible community plugin listen_ports_facts module
+
+This is how you can use ansible listen_ports_facts to get a list of TCP and UDP ports listening on the servers (or) hostgroup -->
+
+$ ansible linux -m listen_ports_facts -i prod-ansible-hosts
+
+linux | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python",
+        "tcp_listen": [
+            {
+                "address": "127.0.0.1",
+                "name": "",
+                "pid": 0,
+                "port": 5000,
+                "protocol": "tcp",
+                "stime": "",
+                "user": ""
+            },
+            {
+                "address": "127.0.0.1",
+                "name": "",
+                "pid": 0,
+                "port": 5001,
+                "protocol": "tcp",
+                "stime": "",
+                "user": ""
+            },
+            {
+                "address": "127.0.0.1",
+                "name": "",
+                "pid": 0,
+                "port": 587,
+                "protocol": "tcp",
+                "stime": "",
+                "user": ""
+            },
+            {
+                "address": "127.0.0.1",
+                "name": "",
+                "pid": 0,
+                "port": 6062,
+                "protocol": "tcp",
+                "stime": "",
+                "user": ""
+            },
