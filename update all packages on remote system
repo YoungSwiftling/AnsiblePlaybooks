@@ -1,0 +1,9 @@
+---
+ - name: update system OS
+   hosts: all
+   tasks: 
+     - name: ensure that system OS is up-to-date
+       dnf: 
+         name: '*'
+         state: latest
+       become: true
