@@ -1,0 +1,130 @@
+ Ansible automation to install Java in Linux machines
+
+We can install Java in multiple targets / linux hosts using ansible. Here I am showing you one demo scenario to do the following tasks using Ansible:
+
+1. Create directory
+
+2. Unzip/Install Java software 
+
+3. Create a symbolic link to uninstalled Java
+
+ Create the playbook with name something like "java_install.yml".
+
+Step#1: Create the play book
+
+[root@demosys01 ~]#  cat java_install.yml
+
+---
+
+- hosts: all
+
+  remote_user: oracle
+
+  tasks:
+
+   - name: Create Folder
+
+     file:
+
+      path: /u01/fmw/java
+
+      mode: 0755
+
+      state: directory
+
+   - name: Unpack archive
+
+     unarchive:
+
+      src: /software/jdk-8u291-linux-x64.tar.gz
+
+      dest: /u01/fmw/java
+
+      remote_src: yes
+
+   - name: Create symbolic link
+
+     file:
+
+      src: "jdk1.8.0_291"
+
+      dest: "/u01/fmw/java/jdk"
+
+      state: link
+
+[root@demosys01 ~]#
+
+
+Step#2:  Verify the playbook to check syntax errors:
+
+# ansible-playbook java_install.yml --syntax-check
+
+playbook: java_install.yml
+
+#
+Here, no errors found. Now go-ahed to run the play book.
+
+
+Step#3: Run the play book
+
+[root@demosys01 ~]# ansible-playbook java_install.yml
+
+PLAY [all] ***********************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************
+
+ok: [192.168.100.1]
+
+ok: [192.168.100.2]
+
+
+TASK [Create Folder] ***********************************************************************************
+
+changed: [192.168.100.1]
+
+changed: [192.168.100.2]
+
+
+TASK [Unpack archive] ***************************************************************************************************************************************
+
+changed: [192.168.100.1]
+
+changed: [192.168.100.2]
+
+
+TASK [Create symbolic link] ***********************************************************************************
+
+changed: [192.168.100.1]
+
+changed: [192.168.100.2]
+
+
+PLAY RECAP ******************************************************************************************************************
+
+192.168.100.1             : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+192.168.100.2             : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[root@demosys01 ~]#
+
+
+Step#4: Now Verify in one of the target host:
+
+verify in target host:
+
+
+[oracle@example01 ]$ hostname -i
+
+192.168.100.2
+
+[oracle@example01 ]$ cd /u01/fmw/java
+
+[oracle@example01 java]$ ls -l
+
+total 4
+
+lrwxrwxrwx 1 oracle dba   12 Nov 10 09:04 jdk -> jdk1.8.0_291
+
+drwxr-xr-x 8 oracle dba 4096 Jun  2 10:05 jdk1.8.0_291
+
+[oracle@example01 java]$

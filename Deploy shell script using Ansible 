@@ -1,0 +1,121 @@
+Deploy shell script using Ansible
+
+How to deploy a shell script on a remote server using Ansible?
+
+see the demo steps:
+
+step#1 : Create or define your shell script in ansible server.
+
+Here the script is demo.sh
+
+
+Step#2 : Create your play book. example deploy_shell.yml
+
+[root@demosys01 ~]# cat deploy_shell.yml
+
+---
+
+#deploy shell script
+
+- name: Transfer and execute a script.
+
+  hosts: all
+
+  user: oracle
+
+  tasks:
+
+   - name: Transfer the script
+
+     copy: src=demo.sh dest=/home/oracle mode=0777
+
+   - name: Execute the script
+
+     command: sh /home/oracle/demo.sh
+
+[root@demosys01 ~]#
+
+
+Step#3 : Check the yaml play book is error free or not deploy_shell.yml
+
+
+[root@demosys01 ~]# ansible-playbook deploy_shell.yml --syntax-check
+
+playbook: deploy_shell.yml
+
+
+Step#4 : Play the yaml play book  deploy_shell.yml 
+
+
+[root@demosys01 ~]# ansible-playbook deploy_shell.yml
+
+PLAY [Transfer and execute a script.] *************************************************************************************
+
+TASK [Gathering Facts] *************************************************************************************
+
+[WARNING]: Platform linux on host 192.168.100.1 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python
+
+interpreter could change this. See https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+
+ok: [192.168.100.1]
+
+[WARNING]: Platform linux on host 192.168.100.2 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python
+
+interpreter could change this. See https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+
+ok: [192.168.100.2]
+
+
+TASK [Transfer the script] *************************************************************************************
+
+changed: [192.168.100.1]
+
+changed: [192.168.100.2]
+
+TASK [Execute the script] *************************************************************************************
+
+changed: [192.168.100.1]
+
+changed: [192.168.100.2]
+
+PLAY RECAP *************************************************************************************
+
+192.168.100.2             : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+192.168.100.1             : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+[root@demosys01 ~]#
+
+Step#5 : Now verify whether script is deployed in the target machines or not
+
+-- on target machine1
+
+[oracle@example1 ~]$ hostname -i
+
+192.168.100.1
+
+[oracle@example1 ~]$ ls demo.sh
+
+demo.sh
+
+[oracle@example1 ~]$ pwd
+
+/home/oracle
+
+
+-- On target machine2
+
+[oracle@example2 ~]$ hostname -i
+
+192.168.100.2
+
+[oracle@example2 ~]$ ls demo.sh
+
+demo.sh
+
+[oracle@example1 ~]$ pwd
+
+/home/oracle
+
+
+Yes, script successfully deployed in the target server.

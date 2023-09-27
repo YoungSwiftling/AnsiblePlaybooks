@@ -1,0 +1,89 @@
+Deploy and execute a shell script in target hosts using Ansible
+
+Let's imagine you have a script to execute in all target hosts. In this case, let's call it setup.sh and for now, it will just be a Shell/ BASH script.
+Step#1 : Create the Setup Script
+
+Lets create the script on our Ansible server because it needs to be local
+
+e.g., create in central/ ansible server
+
+# vi setup.sh
+
+touch test.txt
+
+Step#2: create your play book
+
+# cat play_setup.yml
+
+---
+
+#deploy shell script
+
+- name: Transfer and execute a script.
+
+  hosts: all
+
+  remote_user: oracle
+
+  tasks:
+
+   - name: Transfer the script
+
+     copy: src=setup.sh dest=/home/oracle mode=0777
+
+   - name: Execute the script
+
+     command: sh /home/oracle/setup.sh
+
+Step#3: Now execute your play book after syntax check
+
+# ansible-playbook play_setup.yml --syntax-check
+
+playbook: play_setup.yml
+
+
+# ansible-playbook play_setup.yml
+
+PLAY [Transfer and execute a script.] ***********************************************************************************
+
+TASK [Gathering Facts] ***********************************************************************************
+
+ok: [192.168.100.1]
+
+ok: [192.168.100.2]
+
+TASK [Transfer the script] ***********************************************************************************
+
+ok: [192.168.100.1]
+
+ok: [192.168.100.2]
+
+TASK [Execute the script] ***********************************************************************************
+
+changed: [192.168.100.1]
+
+changed: [192.168.100.2]
+
+PLAY RECAP ***********************************************************************************
+
+192.168.100.2             : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+192.168.100.1             : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+
+Step#4: Verify in one of the target host
+
+connect to 192.168.100.1 and check
+
+
+$ ls setup.sh
+
+setup.sh
+
+$ ls test.txt
+
+test.txt
+
+
+We saw here our script deployed and executed successfully.
